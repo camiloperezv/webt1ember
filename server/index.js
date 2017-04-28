@@ -8,12 +8,15 @@
 //     res.send('hello');
 //   });
 // };
+const bodyParser = require('body-parser');
 var doctors = [
   {
     name: 'Pedro',
     lastName: 'Velez',
     address: 'Medellin 123',
     job: 'Doctor',
+    init: '10:01',
+    end: '19:03',
     gender: 'M',
     birthday: '5/11/1984',
     phone: 987654,
@@ -24,6 +27,8 @@ var doctors = [
     lastName: 'Rojas',
     address: 'Medellin 12223',
     job: 'Doctor',
+    init: '10:01',
+    end: '19:00',
     gender: 'F',
     birthday: '5/10/1974',
     phone: 98764,
@@ -34,6 +39,8 @@ var doctors = [
     lastName: 'Lopera',
     address: 'Sabaneta 12223',
     job: 'Doctor',
+    init: '10:00',
+    end: '19:00',
     gender: 'M',
     birthday: '15/1/1974',
     phone: 98132764,
@@ -44,6 +51,8 @@ var doctors = [
     lastName: 'Corrales',
     address: 'Envigado 12223',
     job: 'Doctor',
+    init: '10:00',
+    end: '19:00',
     gender: 'F',
     birthday: '1/5/1994',
     phone: 98132764,
@@ -86,19 +95,19 @@ var medicInfo = {
   12312399:{
     history:[
       {
-        date:'11/11/1990',
+        date:1493350148186,
         diagnostic:'Mucha gripa',
         medicine:'Acetaminofen y café',
         doctor:478734
       },
       {
-        date:'1/11/1998',
+        date:1493350148186,
         diagnostic:'rinitis',
         medicine:'goticas de miel en la nariz',
         doctor:478734
       },
       {
-        date:'11/1/1998',
+        date:1493350148186,
         diagnostic:'diarrea',
         medicine:'antilaxante',
         doctor:478734
@@ -108,19 +117,19 @@ var medicInfo = {
   123123:{
     history:[
       {
-        date:'12/2/2009',
+        date:1493350148186,
         diagnostic:'dolor de cabeza',
         medicine:'dolex',
         doctor:657465463
       },
       {
-        date:'11/3/2000',
+        date:1493350148186,
         diagnostic:'dolor de estomago',
         medicine:'dejar de comer tanto',
         doctor:657465463
       },
       {
-        date:'4/2/2001',
+        date:1493350148186,
         diagnostic:'mareos',
         medicine:'dulces para controlar la presión',
         doctor:478734
@@ -130,19 +139,19 @@ var medicInfo = {
   123123199:{
     history:[
       {
-        date:'12/2/2007',
+        date:1493350148186,
         diagnostic:'dolor de cabeza',
         medicine:'dolex',
         doctor:657465463
       },
       {
-        date:'11/3/2010',
+        date:1493350148186,
         diagnostic:'fractura de muñeca izquierda',
         medicine:'pañitos de agua',
         doctor:45678734
       },
       {
-        date:'4/2/2011',
+        date:1493350148186,
         diagnostic:'mareos',
         medicine:'no comer dulces por el azucar',
         doctor:45678734
@@ -168,8 +177,8 @@ var consultations = [
     address: 'const1 medellin',
     hour: '16:00',
     day:1,
-    month:1,
-    year:2017,
+    month:2,
+    year:2016,
     doctor: 45678734,
     pacient: 123123,
     duration: 15,
@@ -187,8 +196,8 @@ var consultations = [
     pacient: 123123,
     duration: 15,
     value: 40000,
-    id: 2,
-    ended:true
+    id: 3,
+    ended:false
   },
   {
     address: 'const1 medellin',
@@ -200,8 +209,8 @@ var consultations = [
     pacient: 12312399,
     duration: 15,
     value: 200000,
-    id: 3,
-    ended:true
+    id: 4,
+    ended:false
   }
 ];
 
@@ -227,6 +236,15 @@ const Consultation = {
     get: function(){
         return consultations;
     },
+    create: function(consultant){
+      if(!consultant.address || !consultant.hour || !consultant.day || !consultant.month || !consultant.year || !consultant.doctor || !consultant.pacient || !consultant.duration || !consultant.value ){
+        throw 'wrong params';
+      }
+      consultant.ended = false;
+      consultant.id = consultations.length+1;
+      consultations.push(consultant);
+      return consultant
+    },
     getHistoric: function(){
         let i,cons,res={},doctor;
         for(i=0;i<consultations.length;i++){
@@ -234,7 +252,7 @@ const Consultation = {
             if(!cons.ended){
               continue;
             }
-            doctor = Doctors.findDoctro(cons.doctor);
+            doctor = Doctors.findDoctor(cons.doctor);
             if(!res[cons.year]){
               res[cons.year] = {}
             }
@@ -265,16 +283,18 @@ const Consultation = {
       try{
         let index = this.consultationIndex(id);
         consultations[index].ended = true;
-        return;
+        return consultations[index];
       }catch(e){
         throw e;
       }
     },
-    addHistory: function(consultant){
-      if(!medicInfo[consultant.pacient]){
+    addHistory: function(history,pacient,doctor){
+      if(!medicInfo[pacient]){
         throw 'unable to find the story for this user'
       }
-      medicInfo[consultant.pacient].history.push(consultant);
+      history.doctor = doctor;
+      history.date = new Date().getTime();
+      medicInfo[pacient].history.push(history);
       return;
     },
     getByData: function(year,month){
@@ -282,7 +302,7 @@ const Consultation = {
       for(i=0;i<consultations.length;i++){
         if(consultations[i].year.toString() === year.toString() && consultations[i].month.toString() === month.toString()){
           pacient = Pacient.findPacient(consultations[i].pacient)
-          doctor = Pacient.findDoctro(consultations[i].doctor)
+          doctor = Doctors.findDoctor(consultations[i].doctor)
           cons = {
             pacient:consultations[i].pacient,
             pacientName:pacient.name+' '+pacient.lastName,
@@ -301,7 +321,7 @@ const Consultation = {
     }
 }
 const Doctors = {
-    findDoctro(id){
+    findDoctor:function(id){
         let i;
         for(i=0;i<doctors.length;i++){
             if(doctors[i].docId.toString() === id.toString()){
@@ -309,6 +329,47 @@ const Doctors = {
             }
         }
         return false
+    },
+    findDoctorIndex:function(id){
+        let i;
+        for(i=0;i<doctors.length;i++){
+            if(doctors[i].docId.toString() === id.toString()){
+                return i;
+            }
+        }
+        return false
+    },
+    setHours:function(id,init,end){
+      let doctor = Doctors.findDoctorIndex(id);
+      if(doctor === false ){
+        throw 'unable to find the doctor'
+      }
+      if(!init || !end){
+        throw 'init and end hours are required'
+      }
+      doctors[doctor].end = end;
+      doctors[doctor].init = init;
+      return;
+    },
+    findDoctorsByDate:function(init,end){
+      let i,docs=[],initTimesDoctor,endTimesDoctor;
+      for(i=0;i<doctors.length;i++){
+        initTimesDoctor = doctors[i].init.split(':')
+        endTimesDoctor = doctors[i].end.split(':')
+        if(Number(init[0])>=Number(initTimesDoctor[0]) && Number(end[0])<=Number(endTimesDoctor[0])){
+          if(Number(init[0])==Number(initTimesDoctor[0]) && Number(init[1])<Number(initTimesDoctor[1])){
+            continue;
+          }
+          if(Number(end[0])==Number(endTimesDoctor[0]) && Number(end[1])>Number(endTimesDoctor[1])){
+            continue;
+          }
+          docs.push(doctors[i]);
+        }
+      }
+      if(docs.length === 0){
+        throw '404'
+      }
+      return docs
     }
 }
 
@@ -317,13 +378,16 @@ module.exports = function(app) {
   const globSync   = require('glob').sync;
   var mocks      = globSync('./mocks/**/*.js', { cwd: __dirname }).map(require);
   var proxies    = globSync('./proxies/**/*.js', { cwd: __dirname }).map(require);
-
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({extended: true}));
   // Log proxy requests
   const morgan  = require('morgan');
   app.use(morgan('dev'));
+  //Listar pacientes
   app.get('/api/v1/pacients',function(req,res){
     return res.json(pacients).end();
   });
+  //trae la historia de un paciente pasando el id
   app.get('/api/v1/pacients/history/:id',function(req,res){
     let history = Pacient.getHistoric(req.params.id);
     if(history.error){
@@ -331,31 +395,71 @@ module.exports = function(app) {
     }
     return res.json(history).end();
   });
+  //lista doctores
   app.get('/api/v1/doctors',function(req,res){
     return res.json(doctors).end();
   });
+  //Asigna horarios de trabajo a los doctores en formato HH:MM
+  app.put('/api/v1/doctors/hours',function(req,res){
+    let init = req.body.init;
+    let end = req.body.end;
+    let id = req.body.doctorId;
+    try{
+      Doctors.setHours(id,init,end);
+      return res.json({ok:'ok'}).end();
+    }catch(e){
+      return res.json({error:'unable to update doctor'}).status(409).end();
+    }
+  });
+  //retorna los doctores que cumplan un horario
+  app.get('/api/v1/doctors/init-hour/:initHour/init-min/:initMin/end-hour/:endHour/end-minute/:endMinute',function(req,res){
+    try{
+      let init = [req.params.initHour,req.params.initMin];
+      let end = [req.params.endHour,req.params.endMinute];
+      let doctors = Doctors.findDoctorsByDate(init,end);
+      return res.json(doctors).end();
+    }catch(e){
+      if(e === '404'){
+        return res.json({error:'unable find doctors'}).status(404).end();
+      }
+      return res.json({error:'error finding doctors'}).status(409).end();
+    }
+  });
+  //lista todas las consultas
   app.get('/api/v1/consultations',function(req,res){
     return res.json(Consultation.get()).end();
   });
+  //lista las consultas de un año en un mes
   app.get('/api/v1/consultations/year/:year/month/:month/',function(req,res){
     let consults = Consultation.getByData(req.params.year,req.params.month);
-    return res.json(Consultation.get()).end();
+    return res.json(consults).end();
   });
+  //retorna el historico de cuanto ha recaudado cada medico por año y mes
   app.get('/api/v1/consultations/history',function(req,res){
     return res.json(Consultation.getHistoric()).end();
   });
+  //termina una consulta
   app.put('/api/v1/consultations/end',function(req,res){
-    let consultantId = req.body.id;
-    let consultant = req.body.consultant;
+    let consultantId = req.body.consultationId;
+    let history = req.body.history;
     try{
-      Consultation.pay(consultantId)
-      Consultation.addHistory(consultant)
+      let consultation = Consultation.pay(consultantId);
+      Consultation.addHistory(history,consultation.pacient,consultation.doctor)
       return res.json({ok:'ok'}).end();
     }catch(e){
       return res.json({error:'unable to pay'}).status(409).end();
     }
   });
+  //crea una nueva cita
+  app.post('/api/v1/consultations/',function(req,res){
+    let consultant = req.body.consultation;
+    try{
+      let cons = Consultation.create(consultant);
+      return res.json(cons).end();
+    }catch(e){
+      return res.json({error:'unable to create the consultation'}).status(409).end();
+    }
+  });
   mocks.forEach(function(route) { route(app); });
   proxies.forEach(function(route) { route(app); });
-
 };
