@@ -1,0 +1,24 @@
+<div class="jumbo">
+  <h2>Doctores</h2>
+  {{#link-to 'index' class="btn btn-warning"}}
+    Volver al index
+  {{/link-to}}
+  {{#each model as |doctor|}}
+    <article class="listing">
+        <span></span>
+        <h3>{{doctor.name}} {{doctor.lastName}}</h3>
+        <span>cc: {{doctor.docId}}</span>
+        <span>Dirección: {{doctor.address}}</span>
+        <br>
+        <span>Hora de inicio: {{doctor.init}}</span>
+        <br>
+        <span>Hora de salida: {{doctor.end}}</span>
+        <br>
+        <span>Género: {{doctor.gender}}</span>
+        <br>
+        <span>Cumpleaños: {{doctor.birthday}}</span>
+        <br>
+        <span>Teléfono: {{doctor.phone}}</span>
+    </article>
+  {{/each}}
+</div>
