@@ -1,0 +1,35 @@
+<div class="jumbo">
+  <h2>Histórico</h2>
+  {{#link-to 'index' class="btn btn-warning"}}
+    Volver al index
+  {{/link-to}}
+  <div>
+    {{#each-in model as |ynumber year|}}
+        <h3>{{ynumber}}</h3>
+        {{#each-in year as |month doctors|}}
+            <article class="listing">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Mes</th>
+                            <th>Doctor</th>
+                            <th>Valor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each-in doctors as |doctorId data|}}
+                        <tr>
+                            <td><span>{{convert-month month}}</span></td>
+                            <td><span>{{data.doctor}}</span></td>
+                            <td>{{data.value}}</td>
+                        </tr>
+                        {{/each-in}}
+                    </tbody>
+                </table>
+            
+            
+            </article>
+        {{/each-in}}
+    {{/each-in}}
+  </div>
+</div>

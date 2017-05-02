@@ -9,6 +9,9 @@ const Router = Ember.Router.extend({
 Router.map(function() {
   this.route('pacients');
   this.route('doctors');
+  this.route('month-resume');
+  this.route('consultation-list');
+  this.route('consultation-list-date',{path:'consultation-list-date/year/:year/month/:month'});
 });
 
 export default Router;

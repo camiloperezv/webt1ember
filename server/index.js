@@ -245,6 +245,13 @@ const Consultation = {
       consultations.push(consultant);
       return consultant
     },
+    //Retorna un objeto de la siguiente formato
+    /*
+    [año][mes][doctorId] = {
+      value:Number
+      doctor: String
+    }
+    */
     getHistoric: function(){
         let i,cons,res={},doctor;
         for(i=0;i<consultations.length;i++){
@@ -318,7 +325,34 @@ const Consultation = {
         }
       }
       return res;
-    }
+    },
+    allByDate:function(){
+      let i,res={},pacient,doctor;
+      for(i=0;i<consultations.length;i++){
+        if(!res[consultations[i].year]){
+          res[consultations[i].year] = {}
+        }
+        if(!res[consultations[i].year][consultations[i].month]){
+          res[consultations[i].year][consultations[i].month] = {}
+        }
+        if(!res[consultations[i].year][consultations[i].month][consultations[i].id]){
+          pacient = Pacient.findPacient(consultations[i].pacient)
+          doctor = Doctors.findDoctor(consultations[i].doctor)
+          res[consultations[i].year][consultations[i].month][consultations[i].id] = {
+            pacient:consultations[i].pacient,
+            pacientName:pacient.name+' '+pacient.lastName,
+            doctor:consultations[i].doctor,
+            doctorName:doctor.name+' '+doctor.lastName,
+            value:consultations[i].value,
+            day:consultations[i].day,
+            month:consultations[i].month,
+            year:consultations[i].year,
+            hour:consultations[i].hour
+          }
+        }
+      }
+      return res;
+    },
 }
 const Doctors = {
     findDoctor:function(id){
@@ -460,6 +494,15 @@ module.exports = function(app) {
       return res.json({error:'unable to create the consultation'}).status(409).end();
     }
   });
+  //retorna un historial de todas las consultas organizadas por año y mes
+  app.get('/api/v1/consultations/date',function(req,res){
+    try{
+      let cons = Consultation.allByDate();
+      return res.json(cons).end();
+    }catch(e){
+      return res.json({error:'unable to create the consultation'}).status(409).end();
+    }
+  })
   mocks.forEach(function(route) { route(app); });
   proxies.forEach(function(route) { route(app); });
 };

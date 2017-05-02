@@ -1,0 +1,34 @@
+<div class="jumbo">
+  <h2>Histórico de consultas por año - mes</h2>
+  {{#link-to 'index' class="btn btn-warning"}}
+    Volver al index
+  {{/link-to}}
+  <div>
+        <article class="listing">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Mes</th>
+                        <th>Doctor</th>
+                        <th>Paciente</th>
+                        <th>Hora</th>
+                        <th>Fecha</th>
+                        <th>Valor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each model as |consultation|}}
+                    <tr>
+                        <td>{{convert-month consultation.month}}</td>
+                        <td>{{consultation.doctorName}}</td>
+                        <td>{{consultation.pacientName}}</td>
+                        <td>{{consultation.hour}}</td>
+                        <td>{{consultation.day}}/{{consultation.month}}/{{consultation.year}}</td>
+                        <td>{{consultation.value}}</td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </article>
+  </div>
+</div>
