@@ -1,2 +1,17 @@
-{{outlet}}
+<div class="row">
+    <div class="col-lg-6 col-lg-offset-3">
+      <div class="thumbnail">
+      <legend>Crear cita</legend>
+          <select class="form-control" type="select" onchange={{action 'actualizarCalendario' value="target.value"}} >
+            
+          </select>
+
+          {{input value=direccion class="form-control" placeholder="direccion"}}
+
+      </div>
+    </div>
+</div>
+
+{{log 'Name is:' evetns}}
+
 {{full-calendar events=events}}
