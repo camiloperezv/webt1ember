@@ -3,5 +3,11 @@
   {{#link-to 'doctors' class="btn btn-warning"}}
     Volver a lista de doctores
   {{/link-to}}
- 
+  <br>
+  <br>
+  {{input value=model.init placeholder="hora entrada" class="form-control"}}
+  <br>
+  {{input value=model.end placeholder="hora salida" class="form-control"}}
+  <br>
+  <button class="btn btn-success" {{action "fijarHorario"}}>Guardar</button>
 </div>

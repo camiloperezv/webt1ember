@@ -21,7 +21,7 @@
         <span>Teléfono: {{doctor.phone}}</span>
 
         <br>
-        {{#link-to 'doctors.schedule' doctor.docId class="btn btn-success"}}
+        {{#link-to 'doctors.schedule' doctor.docId (query-params doctor_id=doctor.docId) class="btn btn-success"}}
           horario de trabajo
         {{/link-to}}
     </article>
