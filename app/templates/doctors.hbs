@@ -19,6 +19,11 @@
         <span>Cumpleaños: {{doctor.birthday}}</span>
         <br>
         <span>Teléfono: {{doctor.phone}}</span>
+
+        <br>
+        {{#link-to 'doctors.schedule' doctor.docId class="btn btn-success"}}
+          horario de trabajo
+        {{/link-to}}
     </article>
   {{/each}}
 </div>
