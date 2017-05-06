@@ -19,9 +19,13 @@ export default Ember.Route.extend({
             });
         });
     },
+
     actions:{
         fijarHorario(){
-            alert("guardado exitoso"+this.doctor.init);
+            this.get("ajax").request("/api/v1/doctors/hours",{method: 'PUT',
+        data: {"doctorId":this.doctor.docId, "init":this.doctor.init, "end":this.doctor.end}}).then(function(respuesta){
+                alert("guardado exitoso");
+            });
         }
     }
 });
