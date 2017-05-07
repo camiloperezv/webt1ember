@@ -6,6 +6,7 @@ export default Ember.Controller.extend({
     direccion:null,
     fecha:null,
     hora:null,
+    valor:0,
     duracion:0,
     idPaciente:null,
 //    events:Ember.A([{ title: 'Event 1', start: '2017-05-05T07:08:08', end: '2017-05-05T09:08:08' }, { title: 'Event 2', start: '2017-05-06T07:08:08', end: '2017-05-07T09:08:08' }, { title: 'Event 3', start: '2017-05-10T07:08:08', end: '2017-05-10T09:48:08' }, { title: 'Event 4', start: '2017-05-11T07:15:08', end: '2017-05-11T09:08:08' }]),
@@ -68,6 +69,11 @@ export default Ember.Controller.extend({
                 return;
             }
 
+            if(this.valor<=0){
+                alert("el valor de la cita debe ser superior a 0");
+                return;
+            }
+
             fechaInicial = fechaInicial.split("-").join("").split(":").join("").split(" ").join("");
             let year =fechaInicial.substring(0, 4);
             let mes =fechaInicial.substring(4, 6);
@@ -106,7 +112,7 @@ export default Ember.Controller.extend({
                 doctor: null,
                 pacient: this.idPaciente,
                 duration: parseInt(this.duracion),
-                value: 0,
+                value: this.valor,
                 id: 0,
                 ended:false
             };
@@ -135,6 +141,10 @@ export default Ember.Controller.extend({
                 that.get("ajax").request("/api/v1/consultations/",{method: 'POST',data: {consultation:cita}}).then(function(respuesta){
                     console.log(respuesta);
                     alert("guardado exitoso");
+                    that.set("duracion", 0);
+                    that.set("valor", 0);
+                    that.set("direccion", "");
+                    Ember.$("#fecha").val(null);
                 });
             });
         },

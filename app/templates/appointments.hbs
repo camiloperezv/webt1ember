@@ -29,12 +29,12 @@
             <div class="thumbnail" style="display:{{verFormulario}};">
                 <legend>Cita</legend>
                 <div class="row">
-                    <div class="col-lg-4">
+                    <div class="col-lg-3">
                         <lebel>Dirección</lebel>
                         {{input value=direccion class="form-control" placeholder="direccion"}}
                     </div>
 
-                    <div class="col-lg-4">
+                    <div class="col-lg-5">
                         <lebel>Fecha y hora</lebel>
                         <div class="form-group">
                             <div class='input-group date' id='datetimepicker1'>
@@ -51,9 +51,14 @@
                         </script>
                     </div>
 
-                    <div class="col-lg-4">
-                        <lebel>Duración</lebel>
+                    <div class="col-lg-2">
+                        <lebel>Duración (Horas)</lebel>
                         {{input value=duracion class="form-control" type="number"}}
+                    </div>
+
+                    <div class="col-lg-2">
+                        <lebel>Valor</lebel>
+                        {{input value=valor class="form-control" type="number"}}
                     </div>
                 </div>
 
