@@ -63,6 +63,11 @@ export default Ember.Controller.extend({
                 return;
             }
 
+            if(this.duracion<=0){
+                alert("la duracion debe ser de 1 o más horas");
+                return;
+            }
+
             fechaInicial = fechaInicial.split("-").join("").split(":").join("").split(" ").join("");
             let year =fechaInicial.substring(0, 4);
             let mes =fechaInicial.substring(4, 6);

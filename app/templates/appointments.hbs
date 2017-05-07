@@ -1,5 +1,11 @@
 <div class="row">
     <div class="col-lg-8 col-lg-offset-2">
+        <h1 style="text-align:center;">Agendar citas paciente</h1>
+        <div style="margin-bottom:1em;">
+            {{#link-to 'index' class="btn btn-warning"}}
+                Volver al index
+            {{/link-to}}
+        </div>
         <div class="thumbnail" style="padding:1em;">
             <div class="row">
                 <div class="col-lg-6">
@@ -32,7 +38,7 @@
                         <lebel>Fecha y hora</lebel>
                         <div class="form-group">
                             <div class='input-group date' id='datetimepicker1'>
-                                <input id="fecha" type='text' class="form-control" />
+                                <input id="fecha" type='text' class="form-control" readonly="true" />
                                 <span class="input-group-addon">
                                     <span class="glyphicon glyphicon-calendar"></span>
                                 </span>
@@ -40,7 +46,7 @@
                         </div>
                         <script type="text/javascript">
                             $(function () { 
-                                $('#datetimepicker1').datetimepicker({locale: 'es', format:'YYYY-MM-DD HH:mm'});
+                                $('#datetimepicker1').datetimepicker({locale: 'es', format:'YYYY-MM-DD HH:mm',ignoreReadonly:true});
                             });
                         </script>
                     </div>
@@ -65,5 +71,13 @@
         </div>
     </div>
 </div>
-
+<div style="background-color:white !important;">
 {{full-calendar events=events id="calendar"}}
+</div>
+
+<!--<div id="calendar"></div>-->
+<!--<script type="text/javascript">-->
+    <!--$('#calendar').fullCalendar({-->
+        <!--locale: 'es'-->
+    <!--});-->
+<!--</script>-->
