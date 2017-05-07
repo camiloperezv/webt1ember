@@ -78,13 +78,60 @@ export default Ember.Controller.extend({
             }
 
             horaFinal=(horaFinal>=10?horaFinal:"0"+horaFinal);
+            let horaMinutoInicial=hora+":"+minuto;
+            let horaMinutoFinal=horaFinal+":"+minuto;
 
-            let strFechaInicial = year+"-"+mes+"-"+dia+"T"+hora+":"+minuto+":00";
-            let strFechaFinal = year+"-"+mes+"-"+dia+"T"+horaFinal+":"+minuto+":00";
+            let strFechaInicial = year+"-"+mes+"-"+dia+"T"+horaMinutoInicial+":00";
+            let strFechaFinal = year+"-"+mes+"-"+dia+"T"+horaMinutoFinal+":00";
+
             console.log(strFechaInicial);
             console.log(strFechaFinal);
-            Ember.$("#calendar").fullCalendar('renderEvent', { title: this.direccion, start: strFechaInicial, end: strFechaFinal }, true);
-            alert("cita guardada");
+
+            let cInit = parseInt(horaMinutoInicial.replace(":", ""));
+            let cEnd = parseInt(horaMinutoFinal.replace(":", ""));
+
+            let that=this;
+
+            let cita={
+                address: this.direccion,
+                hour: hora+":"+minuto,
+                day:parseInt(dia),
+                month:parseInt(mes),
+                year:parseInt(year),
+                doctor: null,
+                pacient: this.idPaciente,
+                duration: parseInt(this.duracion),
+                value: 0,
+                id: 0,
+                ended:false
+            };
+
+            this.get('ajax').request('/api/v1/consultations').then(function(consultas){
+                for(var i=0;i<consultas.length;i++){
+                    let consulta = consultas[i];
+                    let hour=consulta.hour;
+                    let end=parseInt((parseInt(hour.substring(0,2))+consulta.duration)+hour.substring(2));
+                    let init=parseInt(hour.replace(":", ""));
+                    
+                    if(parseInt(consulta.year)==parseInt(year)
+                        && parseInt(consulta.month)==parseInt(mes) 
+                        && parseInt(consulta.day)==parseInt(dia)
+                        && ((cInit>init && cInit<end) 
+                            || (cEnd>init && cEnd<end)
+                            || (init>cInit && init<cEnd)
+                            || (end>cInit && end<cEnd)
+                            || (init==cInit && end==cEnd)
+                            )){
+                        alert("ya tiene una consulta a las "+consulta.hour+" que dura "+consulta.duration+" "+(consulta.duration==1?"hora":"horas")+", por lo tanto debe cambiar la hora o el dia de la consulta");
+                        return;
+                    }
+                }
+                Ember.$("#calendar").fullCalendar('renderEvent', { title: that.direccion, start: strFechaInicial, end: strFechaFinal }, true);
+                that.get("ajax").request("/api/v1/consultations/",{method: 'POST',data: {consultation:cita}}).then(function(respuesta){
+                    console.log(respuesta);
+                    alert("guardado exitoso");
+                });
+            });
         },
         mostrarFormulario(){
             if(this.verFormulario=="block")this.set("verFormulario", "none");

@@ -237,12 +237,15 @@ const Consultation = {
         return consultations;
     },
     create: function(consultant){
-      if(!consultant.address || !consultant.hour || !consultant.day || !consultant.month || !consultant.year || !consultant.doctor || !consultant.pacient || !consultant.duration || !consultant.value ){
+      if(!consultant.address || !consultant.hour || !consultant.day || !consultant.month || !consultant.year || !consultant.pacient || !consultant.duration || !consultant.value ){
+        console.log("parametros incorrectos");
         throw 'wrong params';
       }
       consultant.ended = false;
       consultant.id = consultations.length+1;
       consultations.push(consultant);
+      console.log("se creo en ");
+      console.log(consultations);
       return consultant
     },
     //Retorna un objeto de la siguiente formato

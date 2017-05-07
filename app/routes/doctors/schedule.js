@@ -4,6 +4,9 @@ import RSVP from 'rsvp';
 export default Ember.Route.extend({
     ajax: Ember.inject.service(),
     doctor:{},
+    init(){
+        console.log("mierda");
+    },
     model(params){
         let that=this;
         return new RSVP.Promise(function(resolve) {
