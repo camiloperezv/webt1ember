@@ -1,8 +1,6 @@
 <div class="jumbo">
-  <h2>Histórico de consultas</h2>
-  {{#link-to 'index' class="btn btn-warning"}}
-    Volver al index
-  {{/link-to}}
+  <h2 style="text-align:center;">Histórico de consultas</h2>
+
   <div>
     {{#each-in model as |ynumber year|}}
         <h3>{{ynumber}}</h3>
@@ -32,8 +30,8 @@
                         {{/each-in}}
                     </tbody>
                 </table>
-            
-            
+
+
             </article>
         {{/each-in}}
     {{/each-in}}

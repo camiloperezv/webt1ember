@@ -1,0 +1,64 @@
+
+<div class="jumbo">
+  <h2 style="text-align:center;">Consulta del paciente {{model.pacient}}</h2>
+  <br>
+  <br>
+  <div>
+    <article class="listing">
+        <span></span>
+        <span>Lugar de la consulta: {{model.address}}</span>
+        <br>
+        <span>Fecha: {{model.day}}/{{model.month}}/{{model.year}} {{model.hour}}</span>
+        <br>
+        <span>Duracion: {{model.duration}}</span>
+        <br>
+        <span>Doctor: {{model.doctor}}</span>
+        <br>
+        <span>Valor: {{model.value}}</span>
+        <br>
+    </article>
+
+
+    <form {{action "submitHistory" on="submit"}}>
+      <div class="form-group">
+        {{textarea value=diagnostic class="form-control" placeholder="Diagnostico" required="required"}}
+      </div>
+      <div class="form-group">
+        {{textarea value=medicine class="form-control" placeholder="Tratamiento" required="required"}}
+      </div>
+      <button class="btn btn-primary" {{action "submitHistory" model.id}}>Finalizar consulta</button>
+    </form>
+    <h3><button {{action "toggleBody" model.pacient}} class="btn btn-success">Mostrar historial </button></h3>
+    {{#if isShowingBody}}
+    <div class="jumbo">
+      <h2 style="text-align:center;">Histórico de consultas</h2>
+      <div>
+        <article class="listing">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Doctor</th>
+                <th>Diagnostico</th>
+                <th>Tratamiento</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each historys as |history|}}
+              <tr>
+                <td>{{convert-date history.date}}</td>
+                <td>{{history.doctor}}</td>
+                <td>{{history.diagnostic}}</td>
+                <td>{{history.medicine}}</td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </article>
+
+
+      </div>
+    </div>
+    {{/if}}
+  </div>
+</div>

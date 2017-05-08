@@ -1,13 +1,13 @@
 <div class="jumbo">
-  <h2>Pacientes</h2>
-  {{#link-to 'index' class="btn btn-warning"}}
-    Volver al index
-  {{/link-to}}
-  {{#each model as |paciente|}}
+  <h2 style="text-align:center;">Pacientes</h2>
+
+  {{#each model as |pacient|}}
     <article class="listing">
         <span></span>
-        <h3>{{paciente.name}} {{paciente.lastName}}</h3>
+        <h3>{{pacient.name}} {{pacient.lastName}}</h3>
+        <br>
         <span>cc: {{pacient.docId}}</span>
+        <br>
         <span>Dirección: {{pacient.address}}</span>
         <br>
         <span>Ocupación: {{pacient.job}}</span>

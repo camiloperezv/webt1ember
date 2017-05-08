@@ -96,20 +96,20 @@ var medicInfo = {
     history:[
       {
         date:1493350148186,
-        diagnostic:'Mucha gripa',
-        medicine:'Acetaminofen y café',
+          diagnostic:'Gengibitis',
+        medicine:'Limpieza bucal',
         doctor:478734
       },
       {
         date:1493350148186,
-        diagnostic:'rinitis',
-        medicine:'goticas de miel en la nariz',
+        diagnostic:'Desalineamiento de los dientes',
+        medicine:'Frenillos',
         doctor:478734
       },
       {
         date:1493350148186,
-        diagnostic:'diarrea',
-        medicine:'antilaxante',
+        diagnostic:'Caries',
+        medicine:'Extirpación del area afectada',
         doctor:478734
       }
     ]
@@ -118,20 +118,20 @@ var medicInfo = {
     history:[
       {
         date:1493350148186,
-        diagnostic:'dolor de cabeza',
-        medicine:'dolex',
+        diagnostic:'Desalineamiento de los dientes',
+        medicine:'Frenillos',
         doctor:657465463
       },
       {
         date:1493350148186,
-        diagnostic:'dolor de estomago',
-        medicine:'dejar de comer tanto',
+        diagnostic:'Dolor agudo de muelas',
+        medicine:'Calamantes y extirpación de muelas comprometidas',
         doctor:657465463
       },
       {
         date:1493350148186,
-        diagnostic:'mareos',
-        medicine:'dulces para controlar la presión',
+        diagnostic:'Caries',
+        medicine:'Extirpación del area afectada',
         doctor:478734
       }
     ]
@@ -140,20 +140,20 @@ var medicInfo = {
     history:[
       {
         date:1493350148186,
-        diagnostic:'dolor de cabeza',
-        medicine:'dolex',
+        diagnostic:'Desalineamiento de los colmillos',
+        medicine:'Realineamiento por medio de cauchos',
         doctor:657465463
       },
       {
         date:1493350148186,
-        diagnostic:'fractura de muñeca izquierda',
-        medicine:'pañitos de agua',
+        diagnostic:'Gengibitis',
+        medicine:'Limpieza bucal',
         doctor:45678734
       },
       {
         date:1493350148186,
-        diagnostic:'mareos',
-        medicine:'no comer dulces por el azucar',
+        diagnostic:'Desalineamiento de los dientes',
+        medicine:'Frenillos',
         doctor:45678734
       }
     ]
@@ -279,6 +279,12 @@ const Consultation = {
             }
         }
         return res;
+    },
+    getConsultation(id){
+      if(!consultations[id]){
+        return {error:'unable to find consultation data'}
+      }
+      return consultations[id]
     },
     consultationIndex: function(id){
       let i;
@@ -465,6 +471,14 @@ module.exports = function(app) {
   //lista todas las consultas
   app.get('/api/v1/consultations',function(req,res){
     return res.json(Consultation.get()).end();
+  });
+  //trae la informacion de una consulta pasando el id
+  app.get('/api/v1/consultations/id/:id',function(req,res){
+    let consultation = Consultation.getConsultation(req.params.id);
+    if(consultation.error){
+      return res.json(consultation.error).status(409).end();
+    }
+    return res.json(consultation).end();
   });
   //lista las consultas de un año en un mes
   app.get('/api/v1/consultations/year/:year/month/:month/',function(req,res){

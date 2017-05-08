@@ -14,6 +14,7 @@ Router.map(function() {
   this.route('consultation-list');
   this.route('consultation-list-date',{path:'consultation-list-date/year/:year/month/:month'});
   this.route('doctors.schedule', {path:"/doctors/schedule/:doctor_id"});
+  this.route('consultation', {path:'consultation/:id'});
 });
 
 export default Router;

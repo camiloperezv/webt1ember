@@ -1,6 +1,187 @@
-{{!-- The following component displays Ember's default welcome message. --}}
 
-{{!!welcome-page--}}
-{{!-- Feel free to remove this! --}}
+<div class="carousel fade-carousel slide" data-ride="carousel" data-interval="4000" id="bs-carousel">
+
+  <div class="overlay"></div>
+
+
+  <ol class="carousel-indicators">
+    <li data-target="#bs-carousel" data-slide-to="0" class="active"></li>
+    <li data-target="#bs-carousel" data-slide-to="1"></li>
+    <li data-target="#bs-carousel" data-slide-to="2"></li>
+  </ol>
+
+  <div class="carousel-inner">
+    <div class="item slides active">
+      <div class="slide-1"></div>
+      <div class="overlay"></div>
+      <div class="hero">
+
+      </div>
+    </div>
+    <div class="item slides">
+      <div class="slide-2"></div>
+      <div class="overlay"></div>
+      <div class="hero">
+      </div>
+    </div>
+    <div class="item slides">
+      <div class="slide-3"></div>
+      <div class="overlay"></div>
+      <div class="hero">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand">{{#link-to 'index'}}Smile Fresh{{/link-to}}</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li>{{#link-to 'pacients' class="btn btn"}}Lista de Pacientes{{/link-to}}</li>
+        <li>{{#link-to 'doctors' class="btn btn"}}Lista de Doctores{{/link-to}}</li>
+        <li>{{#link-to 'appointments' class="btn btn"}}Agendar cita{{/link-to}}</li>
+        <li>{{#link-to 'month-resume' class="btn btn"}}Histórico de médicos{{/link-to}}</li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Consulta<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li class="dropdown-header">Consulta</li>
+            <li>
+              <select class="form-control" type="select" onchange={{action 'goToConsultation' value="target.value"}} >
+                {{#each consultations as |consult|}}
+                <option value="{{consult.id}}">{{consult.id}}</option>
+                {{/each}}
+              </select>
+            </li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Listado de consultas <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li>{{#link-to 'consultation-list' class="btn btn"}}Histórico{{/link-to}}</li>
+            <li role="separator" class="divider"></li>
+            <li class="dropdown-header">Por fecha</li>
+            <li>
+              <form class="navbar-form navbar-center">
+                <select class="form-control" onchange={{action 'updateYear' value="target.value"}} >
+                  <option value="2017">2017</option>
+                  <option value="2016">2016</option>
+                </select>
+                <select class="form-control" onchange={{action 'updateMonth' value="target.value"}} >
+                  <option value="1">Enero</option>
+                  <option value="2">Febrero</option>
+                  <option value="3">Marzo</option>
+                  <option value="4">Abril</option>
+                  <option value="5">Mayo</option>
+                  <option value="6">Junio</option>
+                  <option value="7">Julio</option>
+                  <option value="8">Agosto</option>
+                  <option value="9">Septiembre</option>
+                  <option value="10">Octubre</option>
+                  <option value="11">Noviembre</option>
+                  <option value="12">Diciembre</option>
+                </select>
+              </form>
+              <button {{action 'goToConsultationsByDate'}} class="btn btn center-block">ir</button>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+<style>
+.fade-carousel {
+    position: relative;
+    height: 300px;
+}
+.fade-carousel .carousel-inner .item {
+    height: 300px;
+}
+.fade-carousel .carousel-indicators > li {
+    margin: 0 2px;
+    background-color: #000;
+    opacity: .7;
+}
+.fade-carousel .carousel-indicators > li.active {
+  width: 10px;
+  height: 10px;
+  opacity: 1;
+}
+
+.hero {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 3;
+    color: #fff;
+    text-align: center;
+    text-transform: uppercase;
+    text-shadow: 1px 1px 0 rgba(0,0,0,.75);
+      -webkit-transform: translate3d(-50%,-50%,0);
+         -moz-transform: translate3d(-50%,-50%,0);
+          -ms-transform: translate3d(-50%,-50%,0);
+           -o-transform: translate3d(-50%,-50%,0);
+              transform: translate3d(-50%,-50%,0);
+}
+.hero h1 {
+    font-size: 6em;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+}
+
+.fade-carousel .carousel-inner .item .hero {
+    opacity: 0;
+    -webkit-transition: 2s all ease-in-out .1s;
+       -moz-transition: 2s all ease-in-out .1s;
+        -ms-transition: 2s all ease-in-out .1s;
+         -o-transition: 2s all ease-in-out .1s;
+            transition: 2s all ease-in-out .1s;
+}
+.fade-carousel .carousel-inner .item.active .hero {
+    opacity: 1;
+    -webkit-transition: 2s all ease-in-out .1s;
+       -moz-transition: 2s all ease-in-out .1s;
+        -ms-transition: 2s all ease-in-out .1s;
+         -o-transition: 2s all ease-in-out .1s;
+            transition: 2s all ease-in-out .1s;
+}
+
+.fade-carousel .slides .slide-1 {
+  height: 300px;
+  background-size: auto;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+.fade-carousel .slides .slide-2,
+.fade-carousel .slides .slide-3 {
+  height: 300px;
+  background-size: cover;
+  background-position: center 70%;
+  background-repeat: no-repeat;
+}
+
+.fade-carousel .slides .slide-1 {
+  background-image: url(http://smilefreshdental.com/wp-content/themes/custom5/images/logo.png);
+}
+.fade-carousel .slides .slide-2 {
+  background-image: url(http://clinicaodontologicaami.com/wp-content/uploads/2016/01/maxresdefault.jpg);
+}
+.fade-carousel .slides .slide-3 {
+  background-image: url(http://hospitaldechillan.cl/web/wp-content_Hos/uploads/2016/09/Editada1-1920-x-1080-1200x727.jpg);
+}
+</style>
 
 {{outlet}}
