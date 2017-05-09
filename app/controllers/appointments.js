@@ -123,33 +123,38 @@ export default Ember.Controller.extend({
                 ended:false
             };
 
-            this.get('ajax').request('/api/v1/consultations').then(function(consultas){
-                for(var i=0;i<consultas.length;i++){
-                    let consulta = consultas[i];
-                    let hour=consulta.hour;
-                    let end=parseInt((parseInt(hour.substring(0,2))+consulta.duration)+hour.substring(2));
-                    let init=parseInt(hour.replace(":", ""));
-                    
-                    if(parseInt(consulta.year)==parseInt(year)
-                        && parseInt(consulta.month)==parseInt(mes) 
-                        && parseInt(consulta.day)==parseInt(dia)
-                        && ((cInit>init && cInit<end) 
-                            || (cEnd>init && cEnd<end)
-                            || (init>cInit && init<cEnd)
-                            || (end>cInit && end<cEnd)
-                            || (init==cInit && end==cEnd)
-                            )){
-                        alert("ya tiene una consulta a las "+consulta.hour+" que dura "+consulta.duration+" "+(consulta.duration==1?"hora":"horas")+", por lo tanto debe cambiar la hora o el dia de la consulta");
-                        return;
-                    }
+            that.get("ajax").request("/api/v1/doctors/id/"+that.idDoctor).then(function(doctor){
+                console.log(doctor);
+                let hInicial=parseInt(doctor.init.replace(":", ""));
+                let hFinal= parseInt(doctor.end.replace(":", ""));
+                if(!(cInit>=hInicial && cEnd<=hFinal)){
+                    alert("El doctor seleccionado no trabaja en ese horario");
+                    return;
                 }
-                that.get("ajax").request("/api/v1/doctors/id/"+that.idDoctor).then(function(doctor){
-                    console.log(doctor);
-                    let hInicial=parseInt(doctor.init.replace(":", ""));
-                    let hFinal= parseInt(doctor.end.replace(":", ""));
-                    if(!(cInit>=hInicial && cEnd<=hFinal)){
-                        alert("El doctor seleccionado no trabaja en ese horario");
-                        return;
+
+                that.get('ajax').request('/api/v1/consultations').then(function(consultas){
+                    for(var i=0;i<consultas.length;i++){
+                        let consulta = consultas[i];
+                        let hour=consulta.hour;
+                        let end=parseInt((parseInt(hour.substring(0,2))+consulta.duration)+hour.substring(2));
+                        let init=parseInt(hour.replace(":", ""));
+
+                        if((that.idDoctor==consulta.doctor || that.idPaciente==consulta.pacient)
+                            && parseInt(consulta.year)==parseInt(year)
+                            && parseInt(consulta.month)==parseInt(mes) 
+                            && parseInt(consulta.day)==parseInt(dia)
+                            && ((cInit>init && cInit<end) 
+                                || (cEnd>init && cEnd<end)
+                                || (init>cInit && init<cEnd)
+                                || (end>cInit && end<cEnd)
+                                || (init==cInit && end==cEnd)
+                                )){
+                            if(that.idDoctor==consulta.doctor)
+                                alert("el doctor ya tiene una consulta a las "+consulta.hour+" que dura "+consulta.duration+" "+(consulta.duration==1?"hora":"horas")+", por lo tanto debe cambiar la hora o el dia de la consulta");
+                            else if(that.idPaciente==consulta.pacient)
+                                alert("el paciente ya tiene una consulta a las "+consulta.hour+" que dura "+consulta.duration+" "+(consulta.duration==1?"hora":"horas")+", por lo tanto debe cambiar la hora o el dia de la consulta");
+                            return;
+                        }
                     }
                     that.get("ajax").request("/api/v1/consultations/",{method: 'POST',data: {consultation:cita}}).then(function(respuesta){
                         Ember.$("#calendar").fullCalendar('renderEvent', { title: that.direccion, start: strFechaInicial, end: strFechaFinal }, true);
