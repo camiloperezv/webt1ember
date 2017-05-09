@@ -1,4 +1,5 @@
 <h2>Aplicación consultorio odontologico</h2>
+<p><b>Ruta aplicación </b>: <a href="http://52.24.63.31:4200" target="_blank">http://52.24.63.31:4200</a></p>
 <h4>Integrantes</h4>
 <ul>
     <li>Camilo Perez</li>
