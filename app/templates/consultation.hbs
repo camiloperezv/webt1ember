@@ -1,20 +1,22 @@
 
 <div class="jumbo" style="margin-top:6em;">
-  <h2 style="text-align:center;">Consulta del paciente {{model.pacient}}</h2>
+  <h2 style="text-align:center;">Consulta del paciente {{model.paciente.name}} {{model.paciente.lastName}}</h2>
   <br>
   <br>
   <div>
     <article class="listing">
         <span></span>
-        <span>Lugar de la consulta: {{model.address}}</span>
+        <span><b>Identificación: </b>{{model.pacient}}</span>
         <br>
-        <span>Fecha: {{model.day}}/{{model.month}}/{{model.year}} {{model.hour}}</span>
+        <span><b>Lugar de la consulta: </b>{{model.address}}</span>
         <br>
-        <span>Duracion: {{model.duration}}</span>
+        <span><b>Fecha: </b>{{model.day}}/{{model.month}}/{{model.year}} {{model.hour}}</span>
         <br>
-        <span>Doctor: {{model.doctor}}</span>
+        <span><b>Duracion: </b>{{model.duration}}</span>
         <br>
-        <span>Valor: {{model.value}}</span>
+        <span><b>Doctor: </b>{{model.medico.name}} {{model.medico.lastName}}</span>
+        <br>
+        <span><b>Valor: </b>{{model.value}}</span>
         <br>
     </article>
 

@@ -25,9 +25,20 @@ export default Ember.Route.extend({
 
     actions:{
         fijarHorario(){
-            this.get("ajax").request("/api/v1/doctors/hours",{method: 'PUT',
-        data: {"doctorId":this.doctor.docId, "init":this.doctor.init, "end":this.doctor.end}}).then(function(respuesta){
+            let that=this;
+            if(!this.doctor.init.match(/^\d\d[:]\d\d$/g)){
+                alert("La hora de entrada no es valida");
+                return;
+            }
+
+            if(!this.doctor.end.match(/^\d\d[:]\d\d$/g)){
+                alert("La hora de salida no es valida");
+                return;
+            }
+
+            this.get("ajax").request("/api/v1/doctors/hours",{method: 'PUT',data: {"doctorId":this.doctor.docId, "init":this.doctor.init, "end":this.doctor.end}}).then(function(respuesta){
                 alert("guardado exitoso");
+                that.transitionTo('doctors');
             });
         }
     }

@@ -281,9 +281,10 @@ const Consultation = {
         return res;
     },
     getConsultation(id){
-      for(var i=0;i<consultations.length;i++){
-        if(consultations[i].id==id)
-          return consultations[i];
+      let consultas=this.todas();
+      for(var i=0;i<consultas.length;i++){
+        if(consultas[i].id==id)
+        return consultas[i];
       }
       return {error:'unable to find consultation data'}
     },

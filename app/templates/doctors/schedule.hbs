@@ -1,10 +1,13 @@
 <div class="jumbo">
   <h2>Horario doctor</h2>
   <br>
+  <span><b>hora entrada</b></span>
   <br>
-  {{input value=model.init placeholder="hora entrada" class="form-control"}}
+  {{input value=model.init placeholder="00:00" class="form-control"}}
   <br>
-  {{input value=model.end placeholder="hora salida" class="form-control"}}
+  <span><b>hora salida</b></span>
+  <br>
+  {{input value=model.end placeholder="00:00" class="form-control"}}
   <br>
   <button class="btn btn-success" {{action "fijarHorario"}}>Guardar</button>
 </div>
