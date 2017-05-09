@@ -89,7 +89,7 @@ export default Ember.Controller.extend({
             let horaFinal=hora+parseInt(this.duracion);
             hora=(hora>=10?hora:"0"+hora);
 
-            if(horaFinal>=24){
+            if((horaFinal==24 && parseInt(minuto)>0) || horaFinal>24){
                 alert("La cita no se puede extendar hasta el dia siguiente, debe disminuir la duración o la hora en la que la cita inicia");
                 return;
             }
@@ -136,7 +136,8 @@ export default Ember.Controller.extend({
                     for(var i=0;i<consultas.length;i++){
                         let consulta = consultas[i];
                         let hour=consulta.hour;
-                        let end=parseInt((parseInt(hour.substring(0,2))+consulta.duration)+hour.substring(2));
+                        let horita=consulta.hour.replace(":", "");
+                        let end=parseInt((parseInt(horita.substring(0,2))+consulta.duration)+horita.substring(2));
                         let init=parseInt(hour.replace(":", ""));
 
                         if((that.idDoctor==consulta.doctor || that.idPaciente==consulta.pacient)
