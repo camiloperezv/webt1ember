@@ -1,5 +1,5 @@
-<h2>Aplicacion consultorio odontologico</h2>
-Integrantes
+<h2>Aplicación consultorio odontologico</h2>
+<h4>Integrantes</h4>
 <ul>
     <li>Camilo Perez</li>
     <li>Daniel Molina</li>
@@ -7,7 +7,7 @@ Integrantes
     <li>Julian Quiroz</li>
 </ul>
 
-<h1>Instrucciones Instalacion Aplicación</h1>
+<h1>Instrucciones Instalación Aplicación</h1>
 <p>Se debe Instalar Nodejs (vresión 6 o superior)</p>
 <p>Una vez descargado el proyecto se deben ejecutar los siguientes comandos en la carpeta del proyecto</p>
 <ol>
