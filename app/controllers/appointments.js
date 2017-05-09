@@ -115,7 +115,7 @@ export default Ember.Controller.extend({
                 day:parseInt(dia),
                 month:parseInt(mes),
                 year:parseInt(year),
-                doctor: this.idDoctor,
+                doctor: idDoctor,
                 pacient: this.idPaciente,
                 duration: parseInt(this.duracion),
                 value: this.valor,
