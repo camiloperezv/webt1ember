@@ -115,7 +115,7 @@ export default Ember.Controller.extend({
                 day:parseInt(dia),
                 month:parseInt(mes),
                 year:parseInt(year),
-                doctor: idDoctor,
+                doctor: this.idDoctor,
                 pacient: this.idPaciente,
                 duration: parseInt(this.duracion),
                 value: this.valor,
@@ -143,16 +143,21 @@ export default Ember.Controller.extend({
                         return;
                     }
                 }
-                Ember.$("#calendar").fullCalendar('renderEvent', { title: that.direccion, start: strFechaInicial, end: strFechaFinal }, true);
                 that.get("ajax").request("/api/v1/doctors/id/"+that.idDoctor).then(function(doctor){
                     console.log(doctor);
+                    let hInicial=parseInt(doctor.init.replace(":", ""));
+                    let hFinal= parseInt(doctor.end.replace(":", ""));
+                    if(!(cInit>=hInicial && cEnd<=hFinal)){
+                        alert("El doctor seleccionado no trabaja en ese horario");
+                        return;
+                    }
                     that.get("ajax").request("/api/v1/consultations/",{method: 'POST',data: {consultation:cita}}).then(function(respuesta){
+                        Ember.$("#calendar").fullCalendar('renderEvent', { title: that.direccion, start: strFechaInicial, end: strFechaFinal }, true);
                         console.log(respuesta);
                         alert("guardado exitoso");
                         that.set("duracion", 0);
                         that.set("valor", 0);
                         that.set("direccion", "");
-                        that.set("idDoctor", 0);
                         Ember.$("#fecha").val(null);
                     });
                 });
