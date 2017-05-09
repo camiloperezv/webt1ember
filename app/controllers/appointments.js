@@ -9,9 +9,13 @@ export default Ember.Controller.extend({
     valor:0,
     duracion:0,
     idPaciente:null,
+    idDoctor:null,
 //    events:Ember.A([{ title: 'Event 1', start: '2017-05-05T07:08:08', end: '2017-05-05T09:08:08' }, { title: 'Event 2', start: '2017-05-06T07:08:08', end: '2017-05-07T09:08:08' }, { title: 'Event 3', start: '2017-05-10T07:08:08', end: '2017-05-10T09:48:08' }, { title: 'Event 4', start: '2017-05-11T07:15:08', end: '2017-05-11T09:08:08' }]),
     citas:[],
     actions:{
+        actualizarDoctor(idDoctor){
+            this.idDoctor=idDoctor;
+        },
         actualizarCalendario(idPaciente){
             Ember.$("#calendar").fullCalendar('removeEvents');
             
@@ -46,6 +50,11 @@ export default Ember.Controller.extend({
         guardarCita(){
             if(!this.idPaciente){
                 alert("Debe seleccionar un paciente para guardar la cita");
+                return;
+            }
+
+            if(!this.idDoctor){
+                alert("Debe seleccionar un doctor para guardar la cita");
                 return;
             }
 
@@ -106,7 +115,7 @@ export default Ember.Controller.extend({
                 day:parseInt(dia),
                 month:parseInt(mes),
                 year:parseInt(year),
-                doctor: null,
+                doctor: this.idDoctor,
                 pacient: this.idPaciente,
                 duration: parseInt(this.duracion),
                 value: this.valor,
@@ -135,13 +144,28 @@ export default Ember.Controller.extend({
                     }
                 }
                 Ember.$("#calendar").fullCalendar('renderEvent', { title: that.direccion, start: strFechaInicial, end: strFechaFinal }, true);
-                that.get("ajax").request("/api/v1/consultations/",{method: 'POST',data: {consultation:cita}}).then(function(respuesta){
-                    console.log(respuesta);
-                    alert("guardado exitoso");
-                    that.set("duracion", 0);
-                    that.set("valor", 0);
-                    that.set("direccion", "");
-                    Ember.$("#fecha").val(null);
+                that.get("ajax").request("/api/v1/doctors/id/"+that.idDoctor).then(function(doctor){
+                    console.log(doctor);
+                    that.get("ajax").request("/api/v1/consultations/",{method: 'POST',data: {consultation:cita}}).then(function(respuesta){
+                        console.log(respuesta);
+                        let hInicial=parseInt(doctor.init.replace(":", ""));
+                        let hFinal= parseInt(doctor.end.replace(":", ""));
+                        let horarioPaciente=parseInt(cita.hour.replace(":", ""));
+
+                        //Validamos el horario de la cita
+                        if(horarioPaciente>=hInicial && horarioPaciente<=hFinal){
+                        alert("guardado exitoso");
+                        that.set("duracion", 0);
+                        that.set("valor", 0);
+                        that.set("direccion", "");
+                        that.set("idDoctor", 0);
+                        Ember.$("#fecha").val(null);
+                        }
+                        else{
+                            alert("No hay un doctor disponible en ese horario!");
+                        }
+
+                    });
                 });
             });
         },
