@@ -24,7 +24,9 @@ export default Ember.Controller.extend({
 
       var response = this.get('ajax').request('/api/v1/consultations/end', {
         method: 'PUT',
-        data: { consultationId: idConsultation, history: {diagnostic: this.get('diagnostic'), medicine: this.get('medicine')} }
+        data: { consultationId: id, history: {diagnostic: this.get('diagnostic'), medicine: this.get('medicine')} }
+      }).then(function(respuesta){
+        alert("consulta finalizada");
       });
       console.log(response)
       this.set('diagnostic', '');

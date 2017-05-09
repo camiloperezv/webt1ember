@@ -281,10 +281,11 @@ const Consultation = {
         return res;
     },
     getConsultation(id){
-      if(!consultations[id]){
-        return {error:'unable to find consultation data'}
+      for(var i=0;i<consultations.length;i++){
+        if(consultations[i].id==id)
+          return consultations[i];
       }
-      return consultations[id]
+      return {error:'unable to find consultation data'}
     },
     consultationIndex: function(id){
       let i;
@@ -502,6 +503,7 @@ module.exports = function(app) {
   //trae la informacion de una consulta pasando el id
   app.get('/api/v1/consultations/id/:id',function(req,res){
     let consultation = Consultation.getConsultation(req.params.id);
+    console.log(consultation);
     if(consultation.error){
       return res.json(consultation.error).status(409).end();
     }

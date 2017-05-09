@@ -15,17 +15,19 @@
             </thead>
             <tbody>
                 {{#each model as |consulta|}}
-                <tr>
-                    <td>{{consulta.paciente.name}} {{consulta.paciente.lastName}}</td>
-                    <td>{{consulta.medico.name}} {{consulta.medico.lastName}}</td>
-                    <td>{{consulta.day}}/{{consulta.month}}/{{consulta.year}}</td>
-                    <td>{{consulta.hour}}</td>
-                    <td>
-                        {{#link-to 'consultation' consulta.id class="btn btn-success"}}
-                            Finalizar y cobrar
-                        {{/link-to}}
-                    </td>
-                </tr>
+                    {{#unless consulta.ended}}
+                        <tr>
+                            <td>{{consulta.paciente.name}} {{consulta.paciente.lastName}}</td>
+                            <td>{{consulta.medico.name}} {{consulta.medico.lastName}}</td>
+                            <td>{{consulta.day}}/{{consulta.month}}/{{consulta.year}}</td>
+                            <td>{{consulta.hour}}</td>
+                            <td>
+                                {{#link-to 'consultation' consulta.id class="btn btn-success"}}
+                                    Finalizar y cobrar
+                                {{/link-to}}
+                            </td>
+                        </tr>
+                    {{/unless}}
                 {{/each}}
             </tbody>
         </table>
