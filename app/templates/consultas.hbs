@@ -1,0 +1,36 @@
+<div class="jumbo">
+  <h2 style="text-align:center;">Cobrar y finalizar consulta</h2>
+
+  <div>
+    <article class="listing">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Paciente</th>
+                    <th>Doctor</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each model as |consulta|}}
+                <tr>
+                    <td>{{consulta.paciente.name}} {{consulta.paciente.lastName}}</td>
+                    <td>{{consulta.medico.name}} {{consulta.medico.lastName}}</td>
+                    <td>{{consulta.day}}/{{consulta.month}}/{{consulta.year}}</td>
+                    <td>{{consulta.hour}}</td>
+                    <td>
+                        {{#link-to 'consultation' consulta.id class="btn btn-success"}}
+                            Finalizar y cobrar
+                        {{/link-to}}
+                    </td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+
+
+    </article>
+  </div>
+</div>

@@ -52,19 +52,7 @@
         <li>{{#link-to 'doctors' class="btn btn"}}Lista de Doctores{{/link-to}}</li>
         <li>{{#link-to 'appointments' class="btn btn"}}Agendar cita{{/link-to}}</li>
         <li>{{#link-to 'month-resume' class="btn btn"}}Histórico de médicos{{/link-to}}</li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Consulta<span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li class="dropdown-header">Consulta</li>
-            <li>
-              <select class="form-control" type="select" onchange={{action 'goToConsultation' value="target.value"}} >
-                {{#each consultations as |consult|}}
-                <option value="{{consult.id}}">{{consult.id}}</option>
-                {{/each}}
-              </select>
-            </li>
-          </ul>
-        </li>
+        <li>{{#link-to 'consultas' class="btn btn"}}Finalizar y cobrar cita{{/link-to}}</li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Listado de consultas <span class="caret"></span></a>
           <ul class="dropdown-menu">

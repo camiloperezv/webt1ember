@@ -362,6 +362,26 @@ const Consultation = {
       }
       return res;
     },
+    todas:function(){
+      let lista=[];
+      for(var i=0;i<consultations.length;i++){
+        let consulta = consultations[i];
+        let medico = Doctors.findDoctor(consulta.doctor);
+        let paciente = null;
+        
+        for(var j=0;j<pacients.length;j++){
+          if(pacients[j].docId==consulta.pacient){
+            paciente=pacients[j];
+            break;
+          }
+        }
+
+        consulta.medico=medico;
+        consulta.paciente=paciente;
+        lista.push(consulta);
+      }
+      return lista;
+    }
 }
 const Doctors = {
     findDoctor:function(id){
@@ -442,6 +462,13 @@ module.exports = function(app) {
   app.get('/api/v1/doctors',function(req,res){
     return res.json(doctors).end();
   });
+  app.get('/api/v1/doctors/id/:id',function(req,res){
+    let doctor = Doctors.findDoctor(req.params.id);
+    if(!doctor){
+      return res.json("El id no existe").status(409).end();
+    }
+    return res.json(doctor).end();
+  });
   //Asigna horarios de trabajo a los doctores en formato HH:MM
   app.put('/api/v1/doctors/hours',function(req,res){
     let init = req.body.init;
@@ -519,7 +546,16 @@ module.exports = function(app) {
     }catch(e){
       return res.json({error:'unable to create the consultation'}).status(409).end();
     }
-  })
+  });
+
+  app.get('/api/v1/consultas',function(req,res){
+    try{
+      let cons = Consultation.todas();
+      return res.json(cons).end();
+    }catch(e){
+      return res.json({error:'unable to get consultation'}).status(409).end();
+    }
+  });
   mocks.forEach(function(route) { route(app); });
   proxies.forEach(function(route) { route(app); });
 };

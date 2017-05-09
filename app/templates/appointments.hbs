@@ -7,7 +7,7 @@
                     <lebel>Paciente</lebel>
                     <select class="form-control" type="select" onchange={{action 'actualizarCalendario' value="target.value"}} >
                         <option value="0">--Seleccione paciente--</option>
-                        {{#each model as |item|}}
+                        {{#each model.pacients as |item|}}
                             <option value="{{item.docId}}">{{item.name}}</option>
                         {{/each}}
                     </select>
@@ -16,7 +16,7 @@
             <br>
 
             <div>
-                <button class="btn" {{action "mostrarFormulario"}} style="margin-bottom:1em;">Agendar cita</button>
+                <button class="btn" {{action "mostrarFormulario"}} style="margin-bottom:1em;">Agregar cita</button>
             </div>
 
 
@@ -25,11 +25,21 @@
                 <legend>Cita</legend>
                 <div class="row">
                     <div class="col-lg-3">
+                        <lebel>Doctor</lebel>
+                        <select class="form-control" type="select" onchange={{action 'actualizarDoctor' value="target.value"}} >
+                            <option value="0">--Seleccione doctor--</option>
+                            {{#each model.doctors as |item|}}
+                                <option value="{{item.docId}}">{{item.name}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+
+                    <div class="col-lg-3">
                         <lebel>Dirección</lebel>
                         {{input value=direccion class="form-control" placeholder="direccion"}}
                     </div>
 
-                    <div class="col-lg-5">
+                    <div class="col-lg-3">
                         <lebel>Fecha y hora</lebel>
                         <div class="form-group">
                             <div class='input-group date' id='datetimepicker1'>
